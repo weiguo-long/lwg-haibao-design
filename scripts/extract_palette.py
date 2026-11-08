@@ -6,6 +6,7 @@
 
 输出: 按面积占比从大到小输出 hex 色值与占比。模型再结合目测判断主色/辅色/强调色/中性色。
 依赖: Pillow（缺失时输出提示，不阻塞流程，可退回目测近似值）。
+兼容: Pillow >= 11 用 get_flattened_data；旧版回退 getdata（Pillow 14 起移除）。
 """
 import argparse
 import sys
@@ -25,7 +26,11 @@ def rgb_to_hex(rgb):
 def quantize(img, k):
     img = img.convert("RGB").resize((200, 200))
     q = img.quantize(colors=k, method=Image.FASTOCTREE).convert("RGB")
-    colors = Counter(q.getdata())
+    if hasattr(q, "get_flattened_data"):
+        pixels = q.get_flattened_data()
+    else:
+        pixels = q.getdata()
+    colors = Counter(pixels)
     total = sum(colors.values())
     return [(rgb_to_hex(c), n / total) for c, n in colors.most_common(k)]
 
