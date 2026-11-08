@@ -18,4 +18,3 @@ WorkBuddy 技能。设计"海报风格"的演讲/展示类单页 HTML，并基�
 ## 说明
 
 - GitHub 更新后，WorkBuddy 中已安装的技能不会自动刷新，需要重新导入一次。
-- 本地母版（全量备份 + 打包源）另存于 `~/workbuddy-skills`。
